@@ -3,9 +3,9 @@
 
 ## User Story
 
-When AN employee with access to sensitive data
-I WANT to randomly generate a password that meets certain criteria
-SO THAT I can create a strong password that provides greater security.
+When an employee with access to sensitive data
+I want to randomly generate a password that meets certain criteria
+So that I can create a strong password that provides greater security.
 
 ## Acceptance Criteria
 
@@ -28,7 +28,7 @@ THEN the password is either displayed in an alert or written to the page
 ## screenshot
 
 The following image shows the web application's appearance and functionality:
-
+https://muchirbickel.github.io/Password-Generator-application/
 
 ![The Password Generator application displays a red button to "Generate Password".](./Assets/03-javascript-homework-demo.png)
 
