@@ -1,83 +1,114 @@
-// Assignment Code
-var generateBtn = document.querySelector("#generate");
+//Input variables
 
-// Write password to the #password input
-function writePassword() {
-  var password = generatePassword();
-  var passwordText = document.querySelector("#password");
+var passLength;
+var confirmNumber;
+var confirmLowercases;
+var confirmUppercases;
+var confirmCharacters;
 
-  passwordText.value = password;
-}
+//Special characters
+character = ["!", "#", "$", "%", "&", "'", "(", ")", "*", "+", ",", "-", ".", "/", "\:", "\;", " < ", "=", " > ", " ? ", "@", "[", "\\", "]", " ^ ", "_", "`", "{", "|", "}", "~"];
+// Numeric characters
+number = [1, 2, 3, 4, 5, 6, 7, 8, 9];
+// Alphabetical characters
+lowerCases = ["a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z"];
+upperCases = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z"];
 
-// function to generate password
-function generatePassword(){
-  var originalLength = passwordLength();
-  var upperLower = getUpperLower();
-  var specialCharacter = getSpecialCharacter();
+//User Choices variable
+var choices;
 
-  var length = originalLength - upperLower.length;
-  length = length - specialCharacter.length;
-  var randomNum = getRandomNum(length);
-
-  var password = upperLower + specialCharacter;
-  for (rand of randomNum){
-    password += rand;
-  }
-  return password.slice(0, originalLength);
-}
-
-// fucntion to get password length
-function passwordLength(){
-  var passLength;
-  var bool = true;
-  do {
-     passLength = window.prompt("Please choose password length between 8 and 128");
-     if(passLength >= 8 || passLength <= 128){
-      bool = false;
-     }
-  } while (bool);
-  return passLength;
-}
-
-// function to get uppercase or lowercase character
-function getUpperLower(){
-  var caseLetter; 
-  do{
-    var bool = false;
-    caseLetter = window.prompt("Please enter the uppercase or lowercase character");
-    if(!isNaN(caseLetter)){
-      bool = true;
+// Password generate function
+function generatePassword() {
+    passLength = parseInt(prompt("How many charaters would you like for your password? Choose between 8 and 128"))
+    if (!passLength){
+        alert("This needs a numeric value!");
     }
-  } while (bool);
-  return caseLetter;
-}
-
-// function to get special character
-function getSpecialCharacter(){
-  var specialChar;
-  var characterArray = ["!", "#", "$", "%", "&", "'", "*", "-", "?", "@", "_"];
-  do{
-    var bool = true;
-    specialChar = window.prompt("Please choose cpecial character from {!, #, $, %, &, ', *, -, ?, @, _ }");
-    for (var i = 0; i < characterArray.length; i++){
-      if(specialChar == characterArray[i]){
-        bool = false;
-      }
+    else if (passLength < 8 || passLength > 128){
+        passLength = parseInt(prompt("You must choose between 8 and 128"));
     }
-  } while (bool);
-  return specialChar;
+    else {
+        confirmNumber = confirm("Would you like your password to contain numbers? Click OK to confirm!");
+        confirmCharacters = confirm("Would you like your password to contain special characters? Click OK to confirm!");
+        confirmLowercases = confirm("Would you like your password to contain lower cases? Click OK to confirm!");
+        confirmUppercases = confirm("Would you like your password to contain upper cases? Click OK to confirm!");
+    };
+    
+    if (!confirmNumber && !confirmCharacters && !confirmLowercases && !confirmUppercases){
+        alert("You must choose at least one criteria!");
+    } 
+    else if (confirmCharacters && confirmNumber && confirmUppercases && confirmLowercases) {
+
+        choices = character.concat(number, lowerCases, upperCases);
+    }
+    // Else if for 3 positive choices
+    else if (confirmCharacters && confirmNumber && confirmUppercases) {
+        choices = character.concat(number, upperCases);
+    }
+    else if (confirmCharacters && confirmNumber && confirmLowercases) {
+        choices = character.concat(number, lowerCases);
+    }
+    else if (confirmCharacters && confirmLowercases && confirmUppercases) {
+        choices = character.concat(lowerCases, upperCases);
+    }
+    else if (confirmNumber && confirmLowercases && confirmUppercases) {
+        choices = number.concat(lowerCases, upperCases);
+    }
+    // Else if for 2 positive choices 
+    else if (confirmCharacters && confirmNumber) {
+        choices = character.concat(number);
+
+    } else if (confirmCharacters && confirmLowercases) {
+        choices = character.concat(lowerCases);
+
+    } else if (confirmCharacters && confirmUppercases) {
+        choices = character.concat(upperCases);
+    }
+    else if (confirmLowercases && confirmNumber) {
+        choices = lowerCases.concat(number);
+
+    } else if (confirmLowercases && confirmUppercases) {
+        choices = lowerCases.concat(upperCases);
+
+    } else if (confirmNumber && confirmUppercases) {
+        choices = number.concat(upperCases);
+    }
+    // Else if for 1 positive choice
+    else if (confirmCharacters) {
+        choices = character;
+    }
+    else if (confirmNumber) {
+        choices = number;
+    }
+    else if (confirmLowercases) {
+        choices = lowerCases;
+    }
+    
+    else if (confirmUppercases) {
+        choices = upperCases;
+    };
+    // password variable array
+    var password = []
+
+    // Random selection for all variables: 
+    for (var i = 0; i < passLength; i++) {
+        var pickChoices = choices[Math.floor(Math.random() * choices.length)];
+        password.push(pickChoices);
+    }
+    // This joins the password array and converts it to a string
+    var p = password.join("");
+    UserInput(p);
+    return p;
+}
+// the password into the textbox
+function UserInput(p) {
+    document.getElementById("password").textContent = p;
 }
 
-// function to generate random number
-function getRandomNum(max){
-  var randNum = [max];
-  for (var i = 0; i < max; i++){
-    randNum[i] =(Math.floor(Math.random() * max));
+// Copy Password to Clipboard
+function copyText() {
+    var copyText = document.getElementById("password");
+    copyText.select();
+    copyText.setSelectionRange(0, 99999)
+    document.execCommand("copy");
+    alert("Password copied to clipboard!");
   }
-  return randNum;
-}
-
-
-
-// Add event listener to generate button
-generateBtn.addEventListener("click", writePassword);
